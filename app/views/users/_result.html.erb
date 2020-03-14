@@ -6,5 +6,19 @@
     <strong> Symbol: </strong> <%=@stock.tricker%>
     <strong> Symbol: </strong> <%=@stock.name%>
     <strong> Symbol: </strong> <%=@stock.last_price%>
+    <% if current_user.can_track_stock?(@stock.tricker) %>
+    <%= link_to 'Add to portfolio', user_stocks_path(user: current_user, tricker: @stock.tricker),
+        class: 'btn btn-xs btn-success', method: :post %>
+    <%else%>
+      <span class="badge badge-secondary">
+        You are already tracking
+        <% if !current_user.under_stock_limit? %>
+          10 stocks 
+        <% end %>
+        <% if current_user.stock_already_tracked?(@stock.tricker) %>
+          this stock
+        <% end %>
+      </span>
+    <% end %>
   </div>
 <% end %>
